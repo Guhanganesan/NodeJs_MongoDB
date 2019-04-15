@@ -1,0 +1,159 @@
+MongoDB Shell Commands:
+
+Start:-
+       net start MongoDB
+	   
+Create Database(employee):-
+
+       use employee
+	   
+Create Collections(details):-
+
+		db.details.insert({name: "Chaitanya", age: 30})
+		
+		Or
+		
+		db.createCollection("details")
+		
+Show databases:-
+
+        show dbs
+		
+Show Collections:-
+     
+		show collections
+		
+		
+Drop databases:-
+
+		db.dropDatabases()
+		
+View Collections:-
+
+        db.details.find()
+		
+-----------------------------------------------------------------------------------
+
+				CREATE COLLECTIONS:-
+				
+capped: type: boolean.
+	This parameter takes only true and false. 
+	This specifies a cap on the max entries a collection can have. Once the collection reaches that limit, it starts overwriting old entries.
+	The point to note here is that when you set the capped option to true you also have to specify the size parameter.
+
+size: type: number.
+	This specifies the max size of collection (capped collection) in bytes.
+
+max: type: number.
+	This specifies the max number of documents a collection can hold.
+
+autoIndexId: type: boolean
+	The default value of this parameter is false. If you set it true then it automatically creates index field _id for each document. We will learn about index in the MongoDB indexing tutorial.
+
+Lets see an example of capped collection:
+
+db.createCollection("teachers", { capped : true, size : 9232768} )
+{ "ok" : 1 }
+
+--------------------------------------------------------------------------------------
+
+Drop Collections:-
+
+	db.mycollection.drop()
+	
+Insert Document:-
+
+	db.beginnersbook.insert(  
+   {  
+     name: "Chaitanya",  
+     age: 30,
+     email: "admin@beginnersbook.com",
+     course: [ { name: "MongoDB", duration: 7 }, { name: "Java", duration: 30 } ]
+   })
+
+--------------------------------------------------------------------------------------
+				INSERT MULTIPLE DOCUMENT:-
+				
+				
+var beginners =
+ [
+    {
+	"StudentId" : 1001,
+	"StudentName" : "Steve",
+        "age": 30
+    },
+    {
+	"StudentId" : 1002,
+	"StudentName" : "Negan",
+        "age": 42
+    },
+    {
+	"StudentId" : 3333,
+	"StudentName" : "Rick",
+        "age": 35
+    },
+];
+db.students.insert(beginners);
+
+
+db.students.find()
+
+db.students.find().forEach(printjson)
+db.students.find().pretty()
+
+------------------------------------------------------------------------------------
+			FIND PARTICULAR DATA:-
+			
+db.students.find({StudentName : "Steve"}).pretty()
+
+db.students.find({"age":{$gt:32}}).pretty()   ----> GREATER THAN 32
+
+db.students.find({"age":{$gt:32}}).pretty()   ----> LESS THAN 32
+
+db.students.find({"age":{$gt:32}}).limit(2).pretty()   ----> LIMIT DATA ONLY 2
+
+
+db.students.find({"StudentId":{$ne:1002}}).pretty()       ----> NOT EQUALS TO
+
+db.collection_name.find({"field_name":{$gte:criteria_value}}).pretty()   ---> GREATER THAN OR EQUALS TO
+
+db.collection_name.find({"field_name":{$lte:criteria_value}}).pretty()   ---> LESS THAN OR EQUALS TO
+
+---------------------------------------------------------------------------------------
+										UPDATE DATA:-
+		
+> db.biodata.find()
+{ "_id" : ObjectId("5cb408a64e08e47b1dbfe9ae"), "name" : "Chaitanya", "age" : 30
+, "website" : "beginnersbook.com" }
+
+> db.biodata.update({"name":"Chaitanya"},{$set:{"name":"Guhan"}})
+WriteResult({ "nMatched" : 1, "nUpserted" : 0, "nModified" : 1 })
+
+> db.biodata.find()
+{ "_id" : ObjectId("5cb408a64e08e47b1dbfe9ae"), "name" : "Guhan", "age" : 30, "w
+ebsite" : "beginnersbook.com" }
+>
+
+-----------------------------------------------------------------------------------------
+
+									 DELETE DATA:-
+									 
+db.students.remove({"StudentId": 3333})
+
+db.walkingdead.remove({"age": 32}, 1)     ----> Remove Single data
+
+db.collection_name.remove({})             ----> Remove All Documents
+
+
+
+------------------------------------------------------------------------------------------
+
+						SORT DATA:-
+						
+db.collecttion_name.find().sort({field_key:1 or -1})
+
+1  -> ASCENDING
+-1 -> DESCENDING
+
+db.studentdata.find({}, {"student_id": 1, _id:0}).sort({"student_id": -1})
+
